@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "9DD8F56B-35FF-41A4-ABA2-3596481C8608"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C255E62-F179-4F90-81B6-1BD5B64F583C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Game Timer/View Controllers/StopWatchViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "StopWatchViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "2C255E62-F179-4F90-81B6-1BD5B64F583C - 456f9b7a7f24f172"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game_Timer.StopWatchViewController.stopWatchViewControllerStoryBoard.getter : __C.UIStoryboard"
+                  moduleName = "Game Timer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kadenwastlund/Desktop/App%20Development%202023-2024/2023/Projects/Game%20Timer/Game-timer/Game%20Timer/View%20Controllers/StopWatchViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "2C255E62-F179-4F90-81B6-1BD5B64F583C - 95b1cf22589781db"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game_Timer.StopWatchViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Game_Timer.StopWatchViewController"
+                  moduleName = "Game Timer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kadenwastlund/Desktop/App%20Development%202023-2024/2023/Projects/Game%20Timer/Game-timer/Game%20Timer/View%20Controllers/StopWatchViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "568">
+               </Location>
+               <Location
+                  uuid = "2C255E62-F179-4F90-81B6-1BD5B64F583C - efff66ab7a89b11d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Game_Timer.StopWatchViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Game_Timer.StopWatchViewController&gt;"
+                  moduleName = "Game Timer"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kadenwastlund/Desktop/App%20Development%202023-2024/2023/Projects/Game%20Timer/Game-timer/Game%20Timer/View%20Controllers/StopWatchViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "544">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
