@@ -25,55 +25,23 @@ class StopWatchViewController: UIViewController {
         lap2LabelColor = lap2ColorWell?.selectedColor ?? labelColor
         lap3LabelColor = lap3ColorWell?.selectedColor ?? labelColor
         lap4LabelColor = lap4ColorWell?.selectedColor ?? labelColor
+        
+        if restorationIdentifier == "StopWatch"{
+            // Initializes the tableview.
+            lapTableView.delegate = self
+            lapTableView.dataSource = self
+            
+            Task { await updateScreen() }
+        }
     }
     
     
-    // Closes the keyboard when the screen is tapped.
-    @IBAction func debugManualUpdate(_ sender: UIButton) {
-        
-        
-        // TODO: Currently does not work 
-        Theme.selectedTheme = Theme(customLabelColor: .brown, customPrimaryColor: .cyan, customBackgroundColor: .green)
-        
-        
-        Task { await updateScreen() }
-        print("Laps: ")
-        print("      Lap 1: ")
-        print("          Label:        '\(lap1Name)'")
-        print("          Label Color:  \(String(describing: lap1LabelColor))")
-        print("          Button Color: \(String(describing: lap1ButtonColor))")
-        print("     Lap 2: ")
-        print("          Label:        '\(lap2Name)'")
-        print("          Label Color:  \(String(describing: lap2LabelColor))")
-        print("          Button Color: \(String(describing: lap2ButtonColor))")
-        print("     Lap 3: ")
-        print("          Label:        '\(lap3Name)'")
-        print("          Label Color:  \(String(describing: lap3LabelColor))")
-        print("          Button Color: \(String(describing: lap3ButtonColor))")
-        print("     Lap 4: ")
-        print("          Label:        '\(lap4Name)'")
-        print("          Label Color:  \(String(describing: lap4LabelColor))")
-        print("          Button Color: \(String(describing: lap4ButtonColor))")
-        
-        print("\n")
-        
-        print("Stop Watch Time: ")
-        print("     Seconds:    \(seconds)")
-        print("     Minutes:    \(minutes)")
-        print("     Hours:      \(hours)")
-        print("     Days:       \(days)")
-        
-        print("\n")
-        
-        print("Theme Info: ")
-        print("     primaryColor:       \(primaryColor)")
-        print("     labelColor:         \(labelColor)")
-        print("     backgroundColor:    \(backgroundColor)")
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) { // When screen is touched..
         self.view.endEditing(true) // Close the keyboard/keypad
     }
+    
+    
     
     
     
@@ -88,6 +56,9 @@ class StopWatchViewController: UIViewController {
     /// Default: false
     var isGoing: Bool = false
     
+    /// The timer between each 1 second.
+    var stopWatchTimer: Timer = Timer()
+    
     //      Theme Variables
     // Mainly for readability
     lazy var primaryColor: UIColor    = Theme.selectedTheme.customPrimaryColor
@@ -99,8 +70,11 @@ class StopWatchViewController: UIViewController {
     // Custom Lap names. The user is able to edit these on the Stop Watch Settings screen.
     /// The custom name for the ``lap1Button``.label
     var lap1Name: String = "Lap 1"
+    /// The custom name for the ``lap2Button``.label
     var lap2Name: String = "Lap 2"
+    /// The custom name for the ``lap3Button``.label
     var lap3Name: String = "Lap 3"
+    /// The custom name for the ``lap4Button``.label
     var lap4Name: String = "Lap 4"
     
     var lap1ButtonColor: UIColor!
@@ -112,13 +86,26 @@ class StopWatchViewController: UIViewController {
     var lap2LabelColor: UIColor!
     var lap3LabelColor: UIColor!
     var lap4LabelColor: UIColor!
-
     
+    var laps: [Lap] = []
     
     // -- Complex Variables/Constants --
     // Variables/Constants that ARE computed
     
     // Time:
+    
+    /// Used to display and calculate mili-seconds
+    var milliSeconds: Int = 0 {
+        didSet {
+            if milliSeconds >= 100 {
+                milliSeconds -= 100
+                seconds += 1
+            }
+            /// The milliseconds label is changed independentally to compete against lag.
+            milliSecondsLabel.text = String(milliSeconds)
+        }
+    }
+    
     
     /// Used to display the seconds for the stop-watch.
     ///
@@ -187,6 +174,8 @@ class StopWatchViewController: UIViewController {
     
     // MARK: Outlets
     // These outlets are used on the main stop-watch screen.
+    /// A label that displays the ``milliSeconds`` integer on the screen.
+    @IBOutlet weak var milliSecondsLabel: UILabel!
     /// A label that displays the ``seconds`` integer on the screen
     @IBOutlet weak var secondsLabel: UILabel!
     /// A label that displays the ``minutes`` integer on the screen
@@ -217,7 +206,32 @@ class StopWatchViewController: UIViewController {
     @IBOutlet weak var lapTableView:     UITableView!
     
     
-    // MARK: Functions:
+    // MARK: Actions
+    
+    /// When the user presses the ``startStopButton`` on the ``StopWatchViewController``.
+    @IBAction func startStopButtonPress(_ sender: UIButton) {
+        startStop_StopWatch()
+    }
+    /// When the user presses the ``clearButton`` on the ``StopWatchViewController``
+    @IBAction func clearButtonPress(_ sender: UIButton) {
+        resetTimer()
+    }
+    
+    @IBAction func lap1ButtonPress(_ sender: UIButton) {
+        createLap(lapName: lap1Name)
+    }
+    @IBAction func lap2ButtonPress(_ sender: UIButton) {
+        createLap(lapName: lap2Name)
+    }
+    @IBAction func lap3ButtonPress(_ sender: UIButton) {
+        createLap(lapName: lap3Name)
+    }
+    @IBAction func lap4ButtonPress(_ sender: UIButton) {
+        createLap(lapName: lap4Name)
+    }
+    
+    
+    // MARK: Functions
     
     /// Updates the screen and makes sure everything is labeled correctly.
     ///
@@ -232,7 +246,7 @@ class StopWatchViewController: UIViewController {
         hoursLabel.text = (String(hours).count == 1 ? "0\(String(hours))" : String(hours))
         /// Sets the secondsLabel to ``days``. If the amount of characters in seconds == 1(single place), put a 0 in front.
         daysLabel.text = (String(days).count == 1 ? "0\(String(days)) Days" : "\(String(days)) Days")
-
+        
         // Colors the buttons
         lap1Button.backgroundColor = lap1ButtonColor
         lap2Button.backgroundColor = lap2ButtonColor
@@ -244,6 +258,56 @@ class StopWatchViewController: UIViewController {
         settingsButton.backgroundColor = secondaryColor
         
     }
+    
+    /// Starts the stopwatch and updates it.
+    func startStop_StopWatch() {
+        if !isGoing {
+            isGoing = true
+            /// The clear button is disabled to prevent accidental reseting.
+            clearButton.isEnabled = false
+            startStopButton.setTitle("Stop", for: .normal)
+            stopWatchTimer = .scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [self] _ in
+                milliSeconds += 1
+                
+                Task { await updateScreen() }
+            })
+        } else {
+            isGoing = false
+            /// The clear button is re-enabled.
+            clearButton.isEnabled = true
+            startStopButton.setTitle("Start", for: .normal)
+            stopWatchTimer.invalidate()
+        }
+    }
+    
+    /// Resets the timer, and will clear the ``lapTableView`` when pressed if the stop-watch is empty.
+    func resetTimer(){
+        if (milliSeconds + seconds + minutes + hours + days) == 0 {
+            // Clear the table-view.
+            laps = []
+            lapTableView.reloadData()
+        } else {
+            // Clears the stop-watch counter
+            milliSeconds = 0
+            seconds = 0
+            minutes = 0
+            hours = 0
+            days = 0
+            Task { await updateScreen() }
+        }
+    }
+    
+    /// Creates a lap and put it on the ``lapTableView``.
+    func createLap(lapName: String) {
+        laps.append(
+            Lap(milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, type: lapName, color: lap1ButtonColor)
+        )
+        lapTableView.beginUpdates()
+        lapTableView.insertRows(at: [IndexPath(row: laps.count-1, section: 0)], with: .automatic)
+        lapTableView.endUpdates()
+        lapTableView.scrollToRow(at: IndexPath(row: laps.count-1, section: 0), at: .middle, animated: true)
+    }
+    
     
     
     // MARK: --- Settings ---
@@ -290,6 +354,41 @@ class StopWatchViewController: UIViewController {
     ///
     /// The color chosen will also change ``lap4Button``'s color to match.
     @IBOutlet weak var lap4ColorWell: UIColorWell!
+    /// The button that the user presses to set all the values they inputed.
+    @IBOutlet weak var confirmButton: UIButton!
+    
+    // MARK: Actions
+    
+    @IBAction func confirmButtonPress(_ sender: UIButton) {
+        if lap1ColorWell.selectedColor != nil {
+            lap1ButtonColor = (lap1ColorWell.selectedColor)!
+        }
+        if lap2ColorWell.selectedColor != nil {
+            lap2ButtonColor = (lap2ColorWell.selectedColor)!
+        }
+        if lap3ColorWell.selectedColor != nil {
+            lap3ButtonColor = (lap3ColorWell.selectedColor)!
+        }
+        if lap4ColorWell.selectedColor != nil {
+            lap4ButtonColor = (lap4ColorWell.selectedColor)!
+        }
+        if !lap1TextField.text!.isEmpty {
+            lap1Name = lap1TextField.text!
+        }
+        if !lap2TextField.text!.isEmpty {
+            lap2Name = lap2TextField.text!
+        }
+        if !lap3TextField.text!.isEmpty {
+            lap3Name = lap3TextField.text!
+        }
+        if !lap4TextField.text!.isEmpty {
+            lap4Name = lap4TextField.text!
+        }
+        dismiss(animated: true) { [self] in
+            viewDidLoad()
+        }
+    }
+    
 }
 
 
@@ -297,18 +396,41 @@ class StopWatchViewController: UIViewController {
 ///
 /// Used primarily for ``StopWatchViewController`` to show and create laps on a table-view(``StopWatchViewController/lapTableView``).
 struct Lap {
-    /// How many seconds was shown when this lap was created.
+    /// How many milliSeconds were shown when this lap was created.
+    let milliSeconds: Int
+    /// How many seconds were shown when this lap was created.
     let seconds: Int
-    /// How many mintues was shown when this lap was created.
+    /// How many mintues were shown when this lap was created.
     let minutes: Int
-    /// How many hours was shown when this lap was created.
+    /// How many hours were shown when this lap was created.
     let hours:   Int
+    /// How many days were shown when this lap was created.
+    let days:   Int
     /// The name of the type.
     let type:    String
     /// The Lap's color set in the Stop-Watch-Settings.
     let color: UIColor
+    /// The message that is printed onto the ``StopWatchViewController/lapTableView``.
+    lazy var displayedMessage: String = "\(type): \(days) days; \(hours):\(minutes):\(seconds).\(milliSeconds)"
 }
 
 
-// TODO: Fix segways.
-/// As of right now, it does not save info from the settings screen.
+extension StopWatchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Tapped")
+    }
+}
+
+extension StopWatchViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return laps.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        cell.textLabel?.text = laps[indexPath.row].displayedMessage
+        
+        return cell
+    }
+}

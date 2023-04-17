@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TimerViewController.swift
 //  Game Timer
 //
 //  Created by Kaden Wastlund on 4/11/23.
