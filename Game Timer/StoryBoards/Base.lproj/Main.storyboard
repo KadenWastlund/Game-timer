@@ -60,7 +60,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KBf-Gw-DML">
-                                                <rect key="frame" x="125.66666666666666" y="0.0" width="117.33333333333334" height="69"/>
+                                                <rect key="frame" x="125.66666666666663" y="0.0" width="117.33333333333337" height="69"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="filled" title="Hide Interface">
                                                     <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
@@ -169,7 +169,7 @@
                                 </constraints>
                             </stackView>
                             <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="Nvz-gS-t5n">
-                                <rect key="frame" x="25.000000000000014" y="127" width="234.33333333333337" height="48"/>
+                                <rect key="frame" x="25" y="127" width="234.33333333333337" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Min" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HeN-Vu-iKT">
                                         <rect key="frame" x="0.0" y="0.0" width="64" height="48"/>
@@ -192,7 +192,7 @@
                                 </subviews>
                             </stackView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aTO-u9-oO8">
-                                <rect key="frame" x="298.66666666666669" y="734.66666666666663" width="78.333333333333314" height="34.333333333333371"/>
+                                <rect key="frame" x="298.66666666666674" y="734.66666666666663" width="78.333333333333258" height="34.333333333333371"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Unhide"/>
                                 <connections>
@@ -290,11 +290,11 @@
                                             <color key="baseBackgroundColor" systemColor="separatorColor"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <segue destination="LYW-uT-9Mm" kind="showDetail" id="rV4-do-LwM"/>
+                                            <segue destination="LYW-uT-9Mm" kind="show" id="0cm-QZ-XAa"/>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xtr-3a-sep" userLabel="Button Cluster Stack View">
-                                        <rect key="frame" x="10" y="441.00000000000006" width="341" height="228.66666666666669"/>
+                                        <rect key="frame" x="10" y="441" width="341" height="228.66666666666674"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yNB-N3-qF0">
                                                 <rect key="frame" x="0.0" y="0.0" width="341" height="78"/>
@@ -348,7 +348,7 @@
                                                         </connections>
                                                     </button>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Mh8-Bc-RAl">
-                                                        <rect key="frame" x="232.66666666666671" y="0.0" width="108.33333333333334" height="142.66666666666666"/>
+                                                        <rect key="frame" x="232.66666666666674" y="0.0" width="108.33333333333331" height="142.66666666666666"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RHl-8p-lCg">
                                                                 <rect key="frame" x="0.0" y="0.0" width="108.33333333333333" height="67.333333333333329"/>
@@ -439,7 +439,7 @@
                                         </prototypes>
                                     </tableView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Czz-7w-rs7" userLabel="Milli Seconds Label">
-                                        <rect key="frame" x="172.66666666666666" y="273" width="15.666666666666657" height="30"/>
+                                        <rect key="frame" x="172.66666666666663" y="273" width="15.666666666666686" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -509,7 +509,7 @@
         <!--StopWatchSettings-->
         <scene sceneID="cab-1I-2GW">
             <objects>
-                <viewController storyboardIdentifier="StopWatchSettings" title="StopWatchSettings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LYW-uT-9Mm" customClass="StopWatchViewController" customModule="Game_Timer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StopWatchSettings" title="StopWatchSettings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LYW-uT-9Mm" customClass="StopWatchSettingsViewController" customModule="Game_Timer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sm2-aH-Xk4">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -581,11 +581,11 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uhM-MX-cOj">
-                                        <rect key="frame" x="134" y="250" width="85" height="35"/>
+                                        <rect key="frame" x="134" y="250.00000000000003" width="85" height="34.333333333333343"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="tinted" title="Confirm"/>
                                         <connections>
-                                            <action selector="confirmButtonPress:" destination="LYW-uT-9Mm" eventType="touchUpInside" id="LmJ-D4-CrV"/>
+                                            <action selector="confirmButtonPress:" destination="LYW-uT-9Mm" eventType="touchUpInside" id="jn7-9t-qgk"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -612,21 +612,22 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WzX-bW-GS5">
-                        <barButtonItem key="backBarButtonItem" title="Close" id="WPr-wz-jcQ"/>
+                        <barButtonItem key="backBarButtonItem" title="Close" image="chevron.backward" catalog="system" id="WPr-wz-jcQ"/>
                     </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <splitViewMasterSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="confirmButton" destination="uhM-MX-cOj" id="RgL-68-Sam"/>
-                        <outlet property="lap1ColorWell" destination="TOM-R8-M6Q" id="4hr-bi-Dux"/>
-                        <outlet property="lap1TextField" destination="BeP-aW-X3t" id="GBM-Vz-iBl"/>
-                        <outlet property="lap2ColorWell" destination="onE-Dl-ffD" id="Xnd-6g-Hnr"/>
-                        <outlet property="lap2TextField" destination="1r2-ZY-CSB" id="qWW-uo-hGz"/>
-                        <outlet property="lap3ColorWell" destination="rOC-VR-Bms" id="OPR-DH-FrH"/>
-                        <outlet property="lap3TextField" destination="47L-wl-Rls" id="TYq-ge-0Vl"/>
-                        <outlet property="lap4ColorWell" destination="Axd-3D-jeZ" id="A1F-Jx-nwM"/>
-                        <outlet property="lap4TextField" destination="rcy-0Q-bwl" id="CRB-X2-fuX"/>
-                        <outlet property="settingsLabel" destination="noJ-QN-UOj" id="smk-py-xgK"/>
+                        <outlet property="confirmButton" destination="uhM-MX-cOj" id="6aj-Ar-dC0"/>
+                        <outlet property="lap1ColorWell" destination="TOM-R8-M6Q" id="krg-Ne-4Er"/>
+                        <outlet property="lap1TextField" destination="BeP-aW-X3t" id="Bwm-P7-8QR"/>
+                        <outlet property="lap2ColorWell" destination="onE-Dl-ffD" id="wA7-Jl-cKx"/>
+                        <outlet property="lap2TextField" destination="1r2-ZY-CSB" id="xcy-Ii-z4b"/>
+                        <outlet property="lap3ColorWell" destination="rOC-VR-Bms" id="wbT-Ro-hvo"/>
+                        <outlet property="lap3TextField" destination="47L-wl-Rls" id="PEy-bp-cOA"/>
+                        <outlet property="lap4ColorWell" destination="Axd-3D-jeZ" id="Oee-Ue-RdA"/>
+                        <outlet property="lap4TextField" destination="rcy-0Q-bwl" id="XoO-WU-toT"/>
+                        <outlet property="settingsLabel" destination="noJ-QN-UOj" id="Epi-GB-rX1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zfs-7O-hxd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -641,8 +642,28 @@
                     <view key="view" contentMode="scaleToFill" id="cYD-N7-Yh3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Hng-Hg-qEn">
+                                <rect key="frame" x="16" y="59" width="361" height="630"/>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0z0-0b-Enu">
+                                <rect key="frame" x="126" y="689" width="140" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Set">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="60"/>
+                                </buttonConfiguration>
+                            </button>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="CYy-hw-VAJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Hng-Hg-qEn" firstAttribute="top" secondItem="CYy-hw-VAJ" secondAttribute="top" id="1Ms-hu-9gk"/>
+                            <constraint firstItem="Hng-Hg-qEn" firstAttribute="centerX" secondItem="CYy-hw-VAJ" secondAttribute="centerX" id="baZ-my-xLa"/>
+                            <constraint firstItem="CYy-hw-VAJ" firstAttribute="bottom" secondItem="Hng-Hg-qEn" secondAttribute="bottom" constant="80" id="ega-Vv-wVd"/>
+                            <constraint firstItem="CYy-hw-VAJ" firstAttribute="trailing" secondItem="Hng-Hg-qEn" secondAttribute="trailing" constant="16" id="pIz-gm-mmE"/>
+                            <constraint firstItem="Hng-Hg-qEn" firstAttribute="leading" secondItem="CYy-hw-VAJ" secondAttribute="leading" constant="16" id="wja-f1-Oio"/>
+                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="gear" catalog="system" selectedImage="gear" id="gYT-u6-SnJ">
                         <color key="badgeColor" name="AccentColor"/>
@@ -650,10 +671,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="igG-fb-Tsx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="538" y="-15"/>
+            <point key="canvasLocation" x="536.64122137404581" y="-15.492957746478874"/>
         </scene>
     </scenes>
     <resources>
+        <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="gear" catalog="system" width="128" height="122"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
         <image name="stopwatch" catalog="system" width="121" height="128"/>

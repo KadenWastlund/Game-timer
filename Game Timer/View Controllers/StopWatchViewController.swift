@@ -6,14 +6,12 @@
 //
 
 import UIKit
+import Foundation
 
 class StopWatchViewController: UIViewController {
     // MARK: --- Misc Functions ---
     override func viewDidLoad() {
         super.viewDidLoad()
-        if self.restorationIdentifier == "StopWatch"{
-            Task { await updateScreen() }
-        }
         
         // Initializes lapButtonColors
         lap1ButtonColor = primaryColor
@@ -21,10 +19,10 @@ class StopWatchViewController: UIViewController {
         lap3ButtonColor = primaryColor
         lap4ButtonColor = primaryColor
         
-        lap1LabelColor = lap1ColorWell?.selectedColor ?? labelColor
-        lap2LabelColor = lap2ColorWell?.selectedColor ?? labelColor
-        lap3LabelColor = lap3ColorWell?.selectedColor ?? labelColor
-        lap4LabelColor = lap4ColorWell?.selectedColor ?? labelColor
+        lap1LabelColor = labelColor
+        lap2LabelColor = labelColor
+        lap3LabelColor = labelColor
+        lap4LabelColor = labelColor
         
         if restorationIdentifier == "StopWatch"{
             // Initializes the tableview.
@@ -248,15 +246,24 @@ class StopWatchViewController: UIViewController {
         daysLabel.text = (String(days).count == 1 ? "0\(String(days)) Days" : "\(String(days)) Days")
         
         // Colors the buttons
-        lap1Button.backgroundColor = lap1ButtonColor
-        lap2Button.backgroundColor = lap2ButtonColor
-        lap3Button.backgroundColor = lap3ButtonColor
-        lap4Button.backgroundColor = lap4ButtonColor
+        lap1Button.tintColor = lap1ButtonColor
+        lap2Button.tintColor = lap2ButtonColor
+        lap3Button.tintColor = lap3ButtonColor
+        lap4Button.tintColor = lap4ButtonColor
         
-        startStopButton.backgroundColor = primaryColor
-        clearButton.backgroundColor = primaryColor
-        settingsButton.backgroundColor = secondaryColor
+        lap1Button.setTitle(lap1Name, for: .normal)
+        lap2Button.setTitle(lap2Name, for: .normal)
+        lap3Button.setTitle(lap3Name, for: .normal)
+        lap4Button.setTitle(lap4Name, for: .normal)
         
+        startStopButton.tintColor = primaryColor
+        clearButton.tintColor = primaryColor
+        settingsButton.tintColor = secondaryColor
+        
+//        Task {
+//            lapTableView.reloadData
+//            lapTableView.
+//        }
     }
     
     /// Starts the stopwatch and updates it.
@@ -310,85 +317,13 @@ class StopWatchViewController: UIViewController {
     
     
     
-    // MARK: --- Settings ---
+    // MARK: Segue
     
-    // MARK: Variables/Constants
-    // -- Simple Variables/Constants --
-    // Variables/Constants that ARE NOT computed
-    
-    // MARK: Outlets
-    // These outlets are used on the stop-watch-settings screen.
-    @IBOutlet weak var settingsLabel: UILabel!
-    
-    /// A text field for a user to change the label and name of a ``Lap`` represented by ``lap1Button``.
-    ///
-    /// The lap's name will also be visable on ``lapTableView`` when a user creates a Lap.
-    @IBOutlet weak var lap1TextField: UITextField!
-    /// A text field for a user to change the label and name of a ``Lap`` represented by ``lap2Button``.
-    ///
-    /// The lap's name will also be visable on ``lapTableView`` when a user creates a Lap.
-    @IBOutlet weak var lap2TextField: UITextField!
-    /// A text field for a user to change the label and name of a ``Lap`` represented by ``lap3Button``.
-    ///
-    /// The lap's name will also be visable on ``lapTableView`` when a user creates a Lap.
-    @IBOutlet weak var lap3TextField: UITextField!
-    /// A text field for a user to change the label and name of a ``Lap`` represented by ``lap4Button``.
-    ///
-    /// The lap's name will also be visable on ``lapTableView`` when a user creates a Lap.
-    @IBOutlet weak var lap4TextField: UITextField!
-    
-    
-    /// A color picker for the user to change the color of ``Lap``s shown in a ``lapTableView``.
-    ///
-    /// The color chosen will also change ``lap1Button``'s color to match.
-    @IBOutlet weak var lap1ColorWell: UIColorWell!
-    /// A color picker for the user to change the color of ``Lap``s shown in a ``lapTableView``.
-    ///
-    /// The color chosen will also change ``lap2Button``'s color to match.
-    @IBOutlet weak var lap2ColorWell: UIColorWell!
-    /// A color picker for the user to change the color of ``Lap``s shown in a ``lapTableView``.
-    ///
-    /// The color chosen will also change ``lap3Button``'s color to match.
-    @IBOutlet weak var lap3ColorWell: UIColorWell!
-    /// A color picker for the user to change the color of ``Lap``s shown in a ``lapTableView``.
-    ///
-    /// The color chosen will also change ``lap4Button``'s color to match.
-    @IBOutlet weak var lap4ColorWell: UIColorWell!
-    /// The button that the user presses to set all the values they inputed.
-    @IBOutlet weak var confirmButton: UIButton!
-    
-    // MARK: Actions
-    
-    @IBAction func confirmButtonPress(_ sender: UIButton) {
-        if lap1ColorWell.selectedColor != nil {
-            lap1ButtonColor = (lap1ColorWell.selectedColor)!
-        }
-        if lap2ColorWell.selectedColor != nil {
-            lap2ButtonColor = (lap2ColorWell.selectedColor)!
-        }
-        if lap3ColorWell.selectedColor != nil {
-            lap3ButtonColor = (lap3ColorWell.selectedColor)!
-        }
-        if lap4ColorWell.selectedColor != nil {
-            lap4ButtonColor = (lap4ColorWell.selectedColor)!
-        }
-        if !lap1TextField.text!.isEmpty {
-            lap1Name = lap1TextField.text!
-        }
-        if !lap2TextField.text!.isEmpty {
-            lap2Name = lap2TextField.text!
-        }
-        if !lap3TextField.text!.isEmpty {
-            lap3Name = lap3TextField.text!
-        }
-        if !lap4TextField.text!.isEmpty {
-            lap4Name = lap4TextField.text!
-        }
-        dismiss(animated: true) { [self] in
-            viewDidLoad()
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? StopWatchSettingsViewController {
+            vc.fromViewController = self
         }
     }
-    
 }
 
 
@@ -405,7 +340,7 @@ struct Lap {
     /// How many hours were shown when this lap was created.
     let hours:   Int
     /// How many days were shown when this lap was created.
-    let days:   Int
+    let days:    Int
     /// The name of the type.
     let type:    String
     /// The Lap's color set in the Stop-Watch-Settings.
@@ -430,6 +365,8 @@ extension StopWatchViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.textLabel?.text = laps[indexPath.row].displayedMessage
+        cell.backgroundColor = laps[indexPath.row].color
+        // TODO: Set the color to what the button's color is.
         
         return cell
     }
