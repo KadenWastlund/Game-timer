@@ -18,6 +18,7 @@
 		FC797FC129E8A29900FDED21 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC797FC029E8A29900FDED21 /* Themes.swift */; };
 		FC87789929E74F5B0052A931 /* alarmTone.wav in Resources */ = {isa = PBXBuildFile; fileRef = FC87789829E74F5B0052A931 /* alarmTone.wav */; };
 		FC87789B29E769EB0052A931 /* StopWatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC87789A29E769EB0052A931 /* StopWatchViewController.swift */; };
+		FCB2236729EF58E1002CF427 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB2236629EF58E1002CF427 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		FC797FC029E8A29900FDED21 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		FC87789829E74F5B0052A931 /* alarmTone.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = alarmTone.wav; path = ../../../../../../../Downloads/alarmTone.wav; sourceTree = "<group>"; };
 		FC87789A29E769EB0052A931 /* StopWatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatchViewController.swift; sourceTree = "<group>"; };
+		FCB2236629EF58E1002CF427 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 		FC09E27D29E5E844000CB74F /* Game Timer */ = {
 			isa = PBXGroup;
 			children = (
+				FCB2236529EF58B1002CF427 /* Constants */,
 				FC09E27E29E5E844000CB74F /* AppDelegate.swift */,
 				FC09E28029E5E844000CB74F /* SceneDelegate.swift */,
 				FC797FC029E8A29900FDED21 /* Themes.swift */,
@@ -96,6 +99,14 @@
 				FC48A00829EDF22C00CA144F /* SettingsViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		FCB2236529EF58B1002CF427 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				FCB2236629EF58E1002CF427 /* Constants.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +188,7 @@
 				FC09E28129E5E844000CB74F /* SceneDelegate.swift in Sources */,
 				FC48A00B29EDF68F00CA144F /* StopWatchSettingsViewController.swift in Sources */,
 				FC48A00929EDF22C00CA144F /* SettingsViewController.swift in Sources */,
+				FCB2236729EF58E1002CF427 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

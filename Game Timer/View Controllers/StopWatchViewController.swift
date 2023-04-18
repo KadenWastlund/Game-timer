@@ -10,6 +10,11 @@ import Foundation
 
 class StopWatchViewController: UIViewController {
     // MARK: --- Misc Functions ---
+    override func viewWillAppear(_ animated: Bool) {
+        stopwatchView.backgroundColor = Theme.selectedTheme.customBackgroundColor
+        
+        // TODO: Set everything to change on appear.
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,10 +29,13 @@ class StopWatchViewController: UIViewController {
         lap3LabelColor = labelColor
         lap4LabelColor = labelColor
         
-        if restorationIdentifier == "StopWatch"{
+        if restorationIdentifier == "StopWatch" {
             // Initializes the tableview.
             lapTableView.delegate = self
             lapTableView.dataSource = self
+            
+            // Set the ClearButton's subtitle to tell the user that you can't clear if there is not count.
+            clearButton.configuration?.subtitle = "Cannot clear when nothing is clearable"
             
             Task { await updateScreen() }
         }
@@ -152,7 +160,7 @@ class StopWatchViewController: UIViewController {
     /// - DidSet:
     ///
     /// When hours is set, it will check if hours >= 60, in which case it will remove 60 hours and add 1 day.
-    var hours:   Int = 0 {
+    var hours: Int = 0 {
         didSet {
             // Adding day.
             if hours >= 60 {                  /// When 'hours' gets to or over 60..
@@ -167,21 +175,25 @@ class StopWatchViewController: UIViewController {
     /// Used to display the days for the stop-watch.
     ///
     /// Represented by ``daysLabel``.
-    var days:    Int = 0
+    var days: Int = 0
     // Days does not have a didSet as it is the largest item that is represented.
     
     // MARK: Outlets
     // These outlets are used on the main stop-watch screen.
+    
+    /// The main view of the View Controller.
+    @IBOutlet var stopwatchView: UIView!
+    
     /// A label that displays the ``milliSeconds`` integer on the screen.
-    @IBOutlet weak var milliSecondsLabel: UILabel!
+    @IBOutlet weak var milliSecondsLabel:   UILabel!
     /// A label that displays the ``seconds`` integer on the screen
-    @IBOutlet weak var secondsLabel: UILabel!
+    @IBOutlet weak var secondsLabel:        UILabel!
     /// A label that displays the ``minutes`` integer on the screen
-    @IBOutlet weak var minutesLabel: UILabel!
+    @IBOutlet weak var minutesLabel:        UILabel!
     /// A label that displays the ``hours`` integer on the screen.
-    @IBOutlet weak var hoursLabel:   UILabel!
+    @IBOutlet weak var hoursLabel:          UILabel!
     /// A label that displays the ``days`` integer on the screen.
-    @IBOutlet weak var daysLabel:    UILabel!
+    @IBOutlet weak var daysLabel:           UILabel!
     /// A button that is used to clear the stop-watch.
     ///
     /// Pressing the button will reset ``seconds``, ``minutes``, ``hours``, and ``days``.
@@ -251,55 +263,82 @@ class StopWatchViewController: UIViewController {
         lap3Button.tintColor = lap3ButtonColor
         lap4Button.tintColor = lap4ButtonColor
         
+        // Sets the titles to the custom names.
         lap1Button.setTitle(lap1Name, for: .normal)
         lap2Button.setTitle(lap2Name, for: .normal)
         lap3Button.setTitle(lap3Name, for: .normal)
         lap4Button.setTitle(lap4Name, for: .normal)
+        lap1Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        lap2Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        lap3Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        lap4Button.titleLabel?.adjustsFontSizeToFitWidth = true
         
+        // Sets the theme for the buttons
         startStopButton.tintColor = primaryColor
         clearButton.tintColor = primaryColor
         settingsButton.tintColor = secondaryColor
-        
-//        Task {
-//            lapTableView.reloadData
-//            lapTableView.
-//        }
     }
     
     /// Starts the stopwatch and updates it.
     func startStop_StopWatch() {
         if !isGoing {
             isGoing = true
+            // Enabled the lap buttons
+            lap1Button.isEnabled = true
+            lap2Button.isEnabled = true
+            lap3Button.isEnabled = true
+            lap4Button.isEnabled = true
             /// The clear button is disabled to prevent accidental reseting.
             clearButton.isEnabled = false
-            startStopButton.setTitle("Stop", for: .normal)
-            stopWatchTimer = .scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [self] _ in
+            /// Tells the user why the clearbutton is disabled
+            clearButton.configuration?.subtitle = "Cannot clear while stop watch is running"
+            startStopButton.configuration?.title = "Stop"
+            stopWatchTimer = .scheduledTimer(withTimeInterval: 0.01, repeats: true, block: { [self] timer in
                 milliSeconds += 1
                 
                 Task { await updateScreen() }
             })
+            RunLoop.current.add(stopWatchTimer, forMode: RunLoop.Mode.common)
         } else {
             isGoing = false
+            
             /// The clear button is re-enabled.
             clearButton.isEnabled = true
-            startStopButton.setTitle("Start", for: .normal)
+            clearButton.configuration?.subtitle = "Press to clear everything"
+            startStopButton.configuration?.title = "Start"
             stopWatchTimer.invalidate()
         }
     }
     
     /// Resets the timer, and will clear the ``lapTableView`` when pressed if the stop-watch is empty.
     func resetTimer(){
-        if (milliSeconds + seconds + minutes + hours + days) == 0 {
+        if clearButton.subtitleLabel?.text != "Are you sure you want to clear everything?" {
+            
+            clearButton.isEnabled = true
+            clearButton.configuration?.subtitle = "Are you sure you want to clear everything?"
+        } else {
             // Clear the table-view.
             laps = []
             lapTableView.reloadData()
-        } else {
+            clearButton.isEnabled = false
+            clearButton.configuration?.subtitle = "Cannot clear when nothing is clearable"
+            
+            // Disables all the lap buttons to prevent '0 days, 0:0:0:0' laps.
+            lap1Button.isEnabled = false
+            lap2Button.isEnabled = false
+            lap3Button.isEnabled = false
+            lap4Button.isEnabled = false
+            
             // Clears the stop-watch counter
             milliSeconds = 0
             seconds = 0
             minutes = 0
             hours = 0
             days = 0
+            
+            clearButton.isEnabled = false
+            clearButton.configuration?.subtitle = "Cannot clear when nothing is clearable"
+            
             Task { await updateScreen() }
         }
     }
@@ -321,7 +360,18 @@ class StopWatchViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? StopWatchSettingsViewController {
+            // Passes the viewcontroller so that it can be edited.
             vc.fromViewController = self
+            // Passes the button colors so the colorPickers have a default value, also fixes a bug where the colors will reset to .tintColor if not chosen.
+            vc.lap1ButtonColor = lap1ButtonColor
+            vc.lap2ButtonColor = lap2ButtonColor
+            vc.lap3ButtonColor = lap3ButtonColor
+            vc.lap4ButtonColor = lap4ButtonColor
+            // Passes the button maes so the text boxes have a default value, also fixes a bug where the names will reset to "lap _" if not chosen.
+            vc.lap1Name = lap1Name
+            vc.lap2Name = lap2Name
+            vc.lap3Name = lap3Name
+            vc.lap4Name = lap4Name
         }
     }
 }
@@ -365,8 +415,13 @@ extension StopWatchViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.textLabel?.text = laps[indexPath.row].displayedMessage
-        cell.backgroundColor = laps[indexPath.row].color
-        // TODO: Set the color to what the button's color is.
+        switch laps[indexPath.row].type{
+        case lap1Name: cell.backgroundColor = lap1ButtonColor
+        case lap2Name: cell.backgroundColor = lap2ButtonColor
+        case lap3Name: cell.backgroundColor = lap3ButtonColor
+        case lap4Name: cell.backgroundColor = lap4ButtonColor
+        default: cell.backgroundColor = .black
+        }
         
         return cell
     }

@@ -23,10 +23,10 @@ struct Theme {
             red: CIColor(color: customPrimaryColor).red,
             green: CIColor(color: customPrimaryColor).green,
             blue: CIColor(color: customPrimaryColor).blue,
-            alpha: CIColor(color: customPrimaryColor).alpha/2
+            alpha: CIColor(color: customPrimaryColor).alpha/CGFloat(Constants.secondaryAlphaChange)
         ))
     }
     var customBackgroundColor: UIColor
+    
+   
 }
-
-

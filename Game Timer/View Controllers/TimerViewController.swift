@@ -30,11 +30,25 @@ class TimerViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        timerView.backgroundColor = Theme.selectedTheme.customBackgroundColor
+        
+        startTimerButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
+        pauseButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
+        resetButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
+        hideShowTimerButton.tintColor = Theme.selectedTheme.customPrimaryColor
+        hideInterface.tintColor = Theme.selectedTheme.customPrimaryColor
+        // TODO: Set everything to change on appear.
+        
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     
+    @IBOutlet var timerView: UIView!
     
     @IBOutlet weak var timerRangeStack: UIStackView!
     @IBOutlet weak var timerRangeLabel: UIStackView!
@@ -133,7 +147,7 @@ class TimerViewController: UIViewController {
                 isGoing = false // Stop the timer
                 print("Time is out!")
                 timesOut = true // Set timesOut to true (see timesOut didSet for more information)
-                startTimerButtonOutlet.isEnabled = false
+                buttonEnableStatusChange(button: startTimerButtonOutlet, enabled: false)
             }
             if currentTime == timeSet {
                 timerBar.setProgress(1.0, animated: true)
@@ -147,7 +161,7 @@ class TimerViewController: UIViewController {
     }
     var timeSet: Int = 10 { // Time set, this will only change when the user inputs a value.
         didSet {
-            startTimerButtonOutlet.isEnabled = true
+            buttonEnableStatusChange(button: startTimerButtonOutlet, enabled: true)
         }
     }
     var isPaused: Bool = false { // Used to pause the timer throughout the code.
@@ -155,16 +169,17 @@ class TimerViewController: UIViewController {
             if isPaused { // When paused..
                 print("--Timer Paused at \(currentTime) seconds...--")
                 isGoing = false // Set isGoing to false (see isGoing didSet for more info)
-                startTimerButtonOutlet.isEnabled = true // 'Light up' the start timer button.
-                pauseButtonOutlet.isEnabled = false // 'dim' the pause timer button.
+                buttonEnableStatusChange(button: startTimerButtonOutlet, enabled: true) // 'Light up' the start timer button.
+                buttonEnableStatusChange(button: pauseButtonOutlet, enabled: false) // 'dim' the pause timer button.
             } else { // When unpaused..
                 print("--Timer unpaused!--")
                 isGoing = true // Set isGoing to true (see isGoing didSet for more info)
-                startTimerButtonOutlet.isEnabled = false // 'dim' the start timer button.
-                pauseButtonOutlet.isEnabled = true // 'Ligh up' the pause timer button.
+                buttonEnableStatusChange(button: startTimerButtonOutlet, enabled: false) // 'dim' the start timer button.
+                buttonEnableStatusChange(button: pauseButtonOutlet, enabled: true) // 'Ligh up' the pause timer button.
             }
         }
     }
+    @IBOutlet weak var hideInterface: UIButton!
     var mainTimer: Timer = Timer() // The timer that is displayed on the main screen.
     var isGoing: Bool = false { // Used programically to keep timers going.
         didSet { // When changed..
@@ -193,6 +208,7 @@ class TimerViewController: UIViewController {
     @IBOutlet weak var randomStack: UIStackView!
     @IBOutlet weak var buttonStackView: UIStackView!
     @IBOutlet weak var timerLabel: UILabel!
+    
     
     @IBAction func hideInterfaceButton(_ sender: UIButton) {
         buttonStackView.isHidden = true
@@ -266,6 +282,7 @@ class TimerViewController: UIViewController {
         timesOut = false // Reset the timesOut boolean (See timesOut didSet for more information)
         timesOutAnimationTimer.invalidate()
         updateTimer() // Set the label text.
+        buttonEnableStatusChange(button: pauseButtonOutlet, enabled: false)
         print("--Timer Reset.--")
     }
     
@@ -279,7 +296,7 @@ class TimerViewController: UIViewController {
         }
     }
     func timeIsOut() {
-        pauseButtonOutlet.isEnabled = false // 'Dim' the pause button
+        buttonEnableStatusChange(button: pauseButtonOutlet, enabled: !isGoing) // 'Dim' the pause button
         timesOutAnimationTimer = .scheduledTimer(withTimeInterval: TimeInterval(2), repeats: false, block: {[self] _ in // Start a timer of 2 seconds
             playAudio()
             Task { await updateTimerLabelBackgroundColor(color: .red) } // Set the timerLabelBackgroundColor to red.
@@ -309,5 +326,10 @@ class TimerViewController: UIViewController {
             timesOutAnimationTimer.invalidate()
             timerLabel.backgroundColor = .clear
         }
+    }
+    
+    func buttonEnableStatusChange(button: UIButton, enabled: Bool) {
+        button.isEnabled = enabled
+        button.subtitleLabel?.isHidden = enabled
     }
 }

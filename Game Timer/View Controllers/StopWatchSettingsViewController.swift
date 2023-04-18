@@ -11,28 +11,46 @@ class StopWatchSettingsViewController: UIViewController {
     
     var fromViewController: StopWatchViewController = StopWatchViewController()
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        // TODO: Set everything to change on appear.
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
+        // Fills the colorWells.selectedColor to the previous color so that the user has a referance point.
+        lap1ColorWell.selectedColor = lap1ButtonColor
+        lap2ColorWell.selectedColor = lap2ButtonColor
+        lap3ColorWell.selectedColor = lap3ButtonColor
+        lap4ColorWell.selectedColor = lap4ButtonColor
+        // Fills the textField.text to the previous names so that the user has a referance point.
+        lap1TextField.text = lap1Name
+        lap2TextField.text = lap2Name
+        lap3TextField.text = lap3Name
+        lap4TextField.text = lap4Name
     }
     
     // MARK: Variables/Constants
     // -- Simple Variables/Constants --
     // Variables/Constants that ARE NOT computed
     
-    // TODO: Do not reset lap_buttonColor
-    var lap1ButtonColor: UIColor = .tintColor
-    var lap2ButtonColor: UIColor = .tintColor
-    var lap3ButtonColor: UIColor = .tintColor
-    var lap4ButtonColor: UIColor = .tintColor
-    var lap1Name: String = "Lap 1"
-    var lap2Name: String = "Lap 2"
-    var lap3Name: String = "Lap 3"
-    var lap4Name: String = "Lap 4"
+    
+    var lap1ButtonColor: UIColor = UIColor()
+    var lap2ButtonColor: UIColor = UIColor()
+    var lap3ButtonColor: UIColor = UIColor()
+    var lap4ButtonColor: UIColor = UIColor()
+    var lap1Name: String =          String()
+    var lap2Name: String =          String()
+    var lap3Name: String =          String()
+    var lap4Name: String =          String()
     
     // MARK: Outlets
     // These outlets are used on the stop-watch-settings screen.
+    
+    /// The main view of the View Controller.
+    @IBOutlet var stopwatchSettingsView: UIView!
+    
+    
     @IBOutlet weak var settingsLabel: UILabel!
     
     /// A text field for a user to change the label and name of a ``Lap`` represented by ``lap1Button``.
@@ -75,6 +93,7 @@ class StopWatchSettingsViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func confirmButtonPress(_ sender: UIButton) {
+        // If the lap_colorWell isn't nil, set the lap_ButtonColor to the colorWell's value.
         if lap1ColorWell.selectedColor != nil {
             lap1ButtonColor = (lap1ColorWell.selectedColor)!
         }
@@ -87,6 +106,7 @@ class StopWatchSettingsViewController: UIViewController {
         if lap4ColorWell.selectedColor != nil {
             lap4ButtonColor = (lap4ColorWell.selectedColor)!
         }
+        // If the lap_TextField.text is !empty, set the lap_Name to the textField's text.
         if !lap1TextField.text!.isEmpty {
             lap1Name = lap1TextField.text!
         }
@@ -99,28 +119,26 @@ class StopWatchSettingsViewController: UIViewController {
         if !lap4TextField.text!.isEmpty {
             lap4Name = lap4TextField.text!
         }
+        // Sets the lap_ButtonColor to the inputed color.
         fromViewController.lap1ButtonColor = lap1ButtonColor
         fromViewController.lap2ButtonColor = lap2ButtonColor
         fromViewController.lap3ButtonColor = lap3ButtonColor
         fromViewController.lap4ButtonColor = lap4ButtonColor
+        // Sets the lap_Name to the inputed value.
         fromViewController.lap1Name = lap1Name
         fromViewController.lap2Name = lap2Name
         fromViewController.lap3Name = lap3Name
         fromViewController.lap4Name = lap4Name
+        // Tell the ``StopWatchViewController`` to update it's screen so the values fix themselves.
         Task { await fromViewController.updateScreen() }
         dismiss(animated: true)
     }
     
+    // MARK: Functions
     
-    
-    
-    
-    // MARK: Segues
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+    func updateTheme(primary: UIColor, secondary: UIColor, background: UIColor) {
+        stopwatchSettingsView.backgroundColor = background
+        confirmButton.tintColor = primary
     }
-    
-    
 }
 
