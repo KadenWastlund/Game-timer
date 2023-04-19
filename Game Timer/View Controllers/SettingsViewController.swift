@@ -14,13 +14,15 @@ class SettingsViewController: UIViewController {
     // These functions don't have any catagroizable function, but they are needed none the less.
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        // TODO: Set everything to change on appear.
+        settingsView.backgroundColor = Theme.selectedTheme.customBackgroundColor
+        setButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
     }
     
     /// When the view is first loaded.
     override func viewDidLoad() {
         super.viewDidLoad()
+        primaryColorWell.selectedColor = Theme.selectedTheme.customPrimaryColor
+        backgroundColorWell.selectedColor = Theme.selectedTheme.customBackgroundColor
     }
     
     // <#Misc Functions go here#>
@@ -33,14 +35,11 @@ class SettingsViewController: UIViewController {
     
     /// A label that simply says "Primary Color:"
     @IBOutlet weak var primaryColorLabel: UILabel!
-    /// A label that simply says "Seconday Color:"
-    @IBOutlet weak var secondaryColorLabel: UILabel!
     /// A label that simply says "Background Color:"
     @IBOutlet weak var backgroundColorLabel: UILabel!
     
     /// A ColorWell that the user can interact with to change the
     @IBOutlet weak var primaryColorWell: UIColorWell!
-    @IBOutlet weak var secondaryColorWell: UIColorWell!
     @IBOutlet weak var backgroundColorWell: UIColorWell!
     
     /// A button that sets all the values on the ``SettingsViewController`` so it effects the entire application.
@@ -51,7 +50,11 @@ class SettingsViewController: UIViewController {
     // These are for when an action is done on an object.
     
     @IBAction func setButtonTouch(_ sender: UIButton) {
-        // MARK: Timer Screen
+        Theme.selectedTheme = Theme(customPrimaryColor: primaryColorWell.selectedColor ?? .tintColor, customBackgroundColor: backgroundColorWell.selectedColor ?? .black)
+        settingsView.backgroundColor = Theme.selectedTheme.customBackgroundColor
+        setButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
+        
+        ThemeDefault.saveColors()
     }
     
     

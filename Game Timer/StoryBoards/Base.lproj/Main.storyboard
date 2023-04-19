@@ -438,19 +438,6 @@
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JoM-Pf-HK1" id="r4B-O8-Zwc">
                                                     <rect key="frame" x="0.0" y="0.0" width="331" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change in time" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8GN-Xh-ON1">
-                                                            <rect key="frame" x="196.66666666666666" y="11.666666666666666" width="114.33333333333334" height="20.333333333333336"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="8GN-Xh-ON1" firstAttribute="centerY" secondItem="r4B-O8-Zwc" secondAttribute="centerY" id="A9P-W1-fk5"/>
-                                                        <constraint firstItem="8GN-Xh-ON1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="r4B-O8-Zwc" secondAttribute="leading" constant="20" symbolic="YES" id="fUM-xT-8ox"/>
-                                                        <constraint firstAttribute="trailing" secondItem="8GN-Xh-ON1" secondAttribute="trailing" constant="20" symbolic="YES" id="whN-DF-V2b"/>
-                                                    </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" name="AccentColor"/>
                                             </tableViewCell>
@@ -675,7 +662,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="SAh-LC-i76" userLabel="Verticle Stack View">
-                                <rect key="frame" x="16" y="59" width="361" height="100"/>
+                                <rect key="frame" x="16" y="59" width="361" height="64"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="WWR-Nf-RLa" userLabel="Primary Color Stack">
                                         <rect key="frame" x="0.0" y="0.0" width="361" height="28"/>
@@ -692,23 +679,8 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemFillColor"/>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="1U1-Hx-vBZ" userLabel="Secondary Color Stack">
-                                        <rect key="frame" x="0.0" y="36" width="361" height="28"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Secondary Color:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QMf-AW-KgS">
-                                                <rect key="frame" x="0.0" y="0.0" width="131.66666666666666" height="28"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <colorWell contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="l11-bo-0BO">
-                                                <rect key="frame" x="333" y="0.0" width="28" height="28"/>
-                                            </colorWell>
-                                        </subviews>
-                                        <color key="backgroundColor" systemColor="systemFillColor"/>
-                                    </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6Ni-7V-4do" userLabel="Background Color Stack">
-                                        <rect key="frame" x="0.0" y="72" width="361" height="28"/>
+                                        <rect key="frame" x="0.0" y="36" width="361" height="28"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Background Color:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGz-2G-XUU">
                                                 <rect key="frame" x="0.0" y="0.0" width="141.33333333333334" height="28"/>
@@ -728,12 +700,13 @@
                         <viewLayoutGuide key="safeArea" id="CYy-hw-VAJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="0z0-0b-Enu" firstAttribute="width" secondItem="cYD-N7-Yh3" secondAttribute="width" multiplier="0.278202" id="AWZ-WB-FIC"/>
+                            <constraint firstItem="CYy-hw-VAJ" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0z0-0b-Enu" secondAttribute="trailing" constant="100" id="3hI-Sb-1KT"/>
                             <constraint firstItem="0z0-0b-Enu" firstAttribute="centerX" secondItem="CYy-hw-VAJ" secondAttribute="centerX" id="AlJ-JQ-utd"/>
                             <constraint firstItem="SAh-LC-i76" firstAttribute="leading" secondItem="CYy-hw-VAJ" secondAttribute="leading" constant="16" id="HlR-8r-ka5"/>
                             <constraint firstItem="CYy-hw-VAJ" firstAttribute="trailing" secondItem="SAh-LC-i76" secondAttribute="trailing" constant="16" id="LhS-n3-wN1"/>
                             <constraint firstItem="0z0-0b-Enu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="SAh-LC-i76" secondAttribute="bottom" constant="20" id="Zq1-ZZ-SJ0"/>
                             <constraint firstItem="CYy-hw-VAJ" firstAttribute="bottom" secondItem="0z0-0b-Enu" secondAttribute="bottom" constant="25" id="neP-1F-VLH"/>
+                            <constraint firstItem="0z0-0b-Enu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CYy-hw-VAJ" secondAttribute="leading" constant="100" id="pp3-JV-mTN"/>
                             <constraint firstItem="SAh-LC-i76" firstAttribute="centerX" secondItem="CYy-hw-VAJ" secondAttribute="centerX" id="r26-7t-bGf"/>
                             <constraint firstItem="SAh-LC-i76" firstAttribute="top" secondItem="CYy-hw-VAJ" secondAttribute="top" id="yCH-q9-GfZ"/>
                         </constraints>
@@ -746,8 +719,6 @@
                         <outlet property="backgroundColorWell" destination="ZD3-1a-wTK" id="IBh-od-cYM"/>
                         <outlet property="primaryColorLabel" destination="6u5-KO-NCx" id="Sso-g2-D0U"/>
                         <outlet property="primaryColorWell" destination="c5n-qu-jlm" id="nru-Nz-EwS"/>
-                        <outlet property="secondaryColorLabel" destination="QMf-AW-KgS" id="SYe-60-mX5"/>
-                        <outlet property="secondaryColorWell" destination="l11-bo-0BO" id="gnr-5q-GQn"/>
                         <outlet property="setButtonOutlet" destination="0z0-0b-Enu" id="Tx0-ek-7nU"/>
                         <outlet property="settingsView" destination="cYD-N7-Yh3" id="5yg-k7-LpZ"/>
                     </connections>

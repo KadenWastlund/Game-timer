@@ -11,23 +11,31 @@ import Foundation
 class StopWatchViewController: UIViewController {
     // MARK: --- Misc Functions ---
     override func viewWillAppear(_ animated: Bool) {
+        // Sets the theme
         stopwatchView.backgroundColor = Theme.selectedTheme.customBackgroundColor
+        startStopButton.tintColor = Theme.selectedTheme.customPrimaryColor
+        clearButton.tintColor = Theme.selectedTheme.customPrimaryColor
+        lapTableView.backgroundColor = Theme.selectedTheme.customSecondaryColor
+        settingsButton.tintColor = Theme.selectedTheme.customSecondaryColor
         
-        // TODO: Set everything to change on appear.
+        // Sets the buttonLabels to change their size depending on the fomt size.
+        lap1Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        lap2Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        lap3Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        lap4Button.titleLabel?.adjustsFontSizeToFitWidth = true
+        
     }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Initializes lapButtonColors
-        lap1ButtonColor = primaryColor
-        lap2ButtonColor = primaryColor
-        lap3ButtonColor = primaryColor
-        lap4ButtonColor = primaryColor
+        lap1Color = primaryColor
+        lap2Color = primaryColor
+        lap3Color = primaryColor
+        lap4Color = primaryColor
         
-        lap1LabelColor = labelColor
-        lap2LabelColor = labelColor
-        lap3LabelColor = labelColor
-        lap4LabelColor = labelColor
         
         if restorationIdentifier == "StopWatch" {
             // Initializes the tableview.
@@ -57,6 +65,10 @@ class StopWatchViewController: UIViewController {
     // -- Simple Variables/Constants --
     // Variables/Constants that ARE NOT computed
     
+    /// Has the settings been edited?
+    var passedFromStopWatchSettings: Bool = false
+    
+    
     /// Is the stop-watch actively counting?
     ///
     /// Default: false
@@ -69,7 +81,6 @@ class StopWatchViewController: UIViewController {
     // Mainly for readability
     lazy var primaryColor: UIColor    = Theme.selectedTheme.customPrimaryColor
     lazy var secondaryColor: UIColor  = Theme.selectedTheme.customSecondaryColor
-    lazy var labelColor: UIColor      = Theme.selectedTheme.customLabelColor
     lazy var backgroundColor: UIColor = Theme.selectedTheme.customBackgroundColor
     
     
@@ -83,17 +94,18 @@ class StopWatchViewController: UIViewController {
     /// The custom name for the ``lap4Button``.label
     var lap4Name: String = "Lap 4"
     
-    var lap1ButtonColor: UIColor!
-    var lap2ButtonColor: UIColor!
-    var lap3ButtonColor: UIColor!
-    var lap4ButtonColor: UIColor!
+    var lap1Color: UIColor!
+    var lap2Color: UIColor!
+    var lap3Color: UIColor!
+    var lap4Color: UIColor!
     
-    var lap1LabelColor: UIColor!
-    var lap2LabelColor: UIColor!
-    var lap3LabelColor: UIColor!
-    var lap4LabelColor: UIColor!
-    
+    /// An array of all the laps that are to be stored on the ``lapTableView``.
     var laps: [Lap] = []
+    
+    var type1Laps: [Lap] = []
+    var type2Laps: [Lap] = []
+    var type3Laps: [Lap] = []
+    var type4Laps: [Lap] = []
     
     // -- Complex Variables/Constants --
     // Variables/Constants that ARE computed
@@ -228,16 +240,16 @@ class StopWatchViewController: UIViewController {
     }
     
     @IBAction func lap1ButtonPress(_ sender: UIButton) {
-        createLap(lapName: lap1Name)
+        createLap(lapName: lap1Name, milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, color: lap1Color)
     }
     @IBAction func lap2ButtonPress(_ sender: UIButton) {
-        createLap(lapName: lap2Name)
+        createLap(lapName: lap2Name, milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, color: lap2Color)
     }
     @IBAction func lap3ButtonPress(_ sender: UIButton) {
-        createLap(lapName: lap3Name)
+        createLap(lapName: lap3Name, milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, color: lap3Color)
     }
     @IBAction func lap4ButtonPress(_ sender: UIButton) {
-        createLap(lapName: lap4Name)
+        createLap(lapName: lap4Name, milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, color: lap4Color)
     }
     
     
@@ -258,10 +270,10 @@ class StopWatchViewController: UIViewController {
         daysLabel.text = (String(days).count == 1 ? "0\(String(days)) Days" : "\(String(days)) Days")
         
         // Colors the buttons
-        lap1Button.tintColor = lap1ButtonColor
-        lap2Button.tintColor = lap2ButtonColor
-        lap3Button.tintColor = lap3ButtonColor
-        lap4Button.tintColor = lap4ButtonColor
+        lap1Button.tintColor = lap1Color
+        lap2Button.tintColor = lap2Color
+        lap3Button.tintColor = lap3Color
+        lap4Button.tintColor = lap4Color
         
         // Sets the titles to the custom names.
         lap1Button.setTitle(lap1Name, for: .normal)
@@ -313,9 +325,9 @@ class StopWatchViewController: UIViewController {
     /// Resets the timer, and will clear the ``lapTableView`` when pressed if the stop-watch is empty.
     func resetTimer(){
         if clearButton.subtitleLabel?.text != "Are you sure you want to clear everything?" {
-            
             clearButton.isEnabled = true
             clearButton.configuration?.subtitle = "Are you sure you want to clear everything?"
+            clearButton.tintColor = Theme.selectedTheme.customSecondaryColor
         } else {
             // Clear the table-view.
             laps = []
@@ -339,19 +351,35 @@ class StopWatchViewController: UIViewController {
             clearButton.isEnabled = false
             clearButton.configuration?.subtitle = "Cannot clear when nothing is clearable"
             
+            clearButton.tintColor = Theme.selectedTheme.customPrimaryColor
+            
             Task { await updateScreen() }
         }
     }
     
     /// Creates a lap and put it on the ``lapTableView``.
-    func createLap(lapName: String) {
-        laps.append(
-            Lap(milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, type: lapName, color: lap1ButtonColor)
-        )
+    func createLap(lapName: String, milliSeconds: Int, seconds: Int, minutes: Int, hours: Int, days: Int, color: UIColor) {
+        let lap = Lap(milliSeconds: milliSeconds, seconds: seconds, minutes: minutes, hours: hours, days: days, type: lapName, color: color)
+        
+        laps.append(lap)
+        switch lap.type{
+        case lap1Name: type1Laps.append(lap)
+        case lap2Name: type2Laps.append(lap)
+        case lap3Name: type3Laps.append(lap)
+        case lap4Name: type4Laps.append(lap)
+        default: print("lap.type doesn't sort.")
+        }
         lapTableView.beginUpdates()
         lapTableView.insertRows(at: [IndexPath(row: laps.count-1, section: 0)], with: .automatic)
         lapTableView.endUpdates()
-        lapTableView.scrollToRow(at: IndexPath(row: laps.count-1, section: 0), at: .middle, animated: true)
+        if restorationIdentifier == "StopWatch" {
+            lapTableView.scrollToRow(at: IndexPath(row: laps.count-1, section: 0), at: .middle, animated: true)
+        }
+    }
+    
+    func resetLapTableView() {
+        // Resets the table.
+        lapTableView.reloadData()
     }
     
     
@@ -363,10 +391,10 @@ class StopWatchViewController: UIViewController {
             // Passes the viewcontroller so that it can be edited.
             vc.fromViewController = self
             // Passes the button colors so the colorPickers have a default value, also fixes a bug where the colors will reset to .tintColor if not chosen.
-            vc.lap1ButtonColor = lap1ButtonColor
-            vc.lap2ButtonColor = lap2ButtonColor
-            vc.lap3ButtonColor = lap3ButtonColor
-            vc.lap4ButtonColor = lap4ButtonColor
+            vc.lap1ButtonColor = lap1Color
+            vc.lap2ButtonColor = lap2Color
+            vc.lap3ButtonColor = lap3Color
+            vc.lap4ButtonColor = lap4Color
             // Passes the button maes so the text boxes have a default value, also fixes a bug where the names will reset to "lap _" if not chosen.
             vc.lap1Name = lap1Name
             vc.lap2Name = lap2Name
@@ -397,6 +425,19 @@ struct Lap {
     let color: UIColor
     /// The message that is printed onto the ``StopWatchViewController/lapTableView``.
     lazy var displayedMessage: String = "\(type): \(days) days; \(hours):\(minutes):\(seconds).\(milliSeconds)"
+    
+    // MARK: Computed Properties
+    var timeInMilliSeconds: Int {
+        var totalTime: Int = 0
+        
+        totalTime += milliSeconds
+        totalTime += seconds * 100
+        totalTime += minutes * 60 * 100
+        totalTime += hours   * 60 * 60 * 100
+        totalTime += days    * 24 * 60 * 60 * 100
+        
+        return totalTime
+    }
 }
 
 
@@ -413,14 +454,67 @@ extension StopWatchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        var selectedLap: Lap = laps[indexPath.row]
+        var lastCellOfSameType: Lap = Lap(milliSeconds: 0, seconds: 0, minutes: 0, hours: 0, days: 0, type: "DEBUGGINGMADNESS", color: .black)
         
-        cell.textLabel?.text = laps[indexPath.row].displayedMessage
-        switch laps[indexPath.row].type{
-        case lap1Name: cell.backgroundColor = lap1ButtonColor
-        case lap2Name: cell.backgroundColor = lap2ButtonColor
-        case lap3Name: cell.backgroundColor = lap3ButtonColor
-        case lap4Name: cell.backgroundColor = lap4ButtonColor
-        default: cell.backgroundColor = .black
+        switch selectedLap.type{
+        case lap1Name:
+            if type1Laps.count > 1 {
+                lastCellOfSameType = type1Laps[type1Laps.count-2]
+            }
+        case lap2Name:
+            if type2Laps.count > 1 {
+                lastCellOfSameType = type2Laps[type2Laps.count-2]
+            }
+        case lap3Name:
+            if type3Laps.count > 1 {
+                lastCellOfSameType = type3Laps[type3Laps.count-2]
+            }
+        case lap4Name:
+            if type4Laps.count > 1 {
+                lastCellOfSameType = type4Laps[type4Laps.count-2]
+            }
+        default: print("selectedLap.type doesn't sort.")
+        }
+        
+        var secondsFromLastCellOfSameType: Int = Int(
+            (
+                (
+                    Double(selectedLap.timeInMilliSeconds)
+                                    -
+                    Double(lastCellOfSameType.timeInMilliSeconds)
+                ) / 100
+            ).rounded(.down)
+        )
+        
+        var milliSecondsFromLastCellOfSameType: Int = Int(
+            (selectedLap.timeInMilliSeconds - lastCellOfSameType.timeInMilliSeconds)
+                                -
+            secondsFromLastCellOfSameType * 100
+        )
+        
+        if secondsFromLastCellOfSameType < 0 {
+            secondsFromLastCellOfSameType = 0
+            milliSecondsFromLastCellOfSameType = 0
+        }
+        
+        cell.textLabel?.text = selectedLap.displayedMessage + " | + \(secondsFromLastCellOfSameType).\(milliSecondsFromLastCellOfSameType) seconds"
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        print("")
+        print("Selected Lap's Type: \(selectedLap.type)")
+        print("Last Lap's Type: \(lastCellOfSameType.type)")
+        print("")
+        print("Selected Laps' Milliseconds: \(selectedLap.timeInMilliSeconds)")
+        print("Last Laps's Milliseconds: \(lastCellOfSameType.timeInMilliSeconds)")
+        print("Seconds From Last Cell of Same Type: \(secondsFromLastCellOfSameType)")
+        print("MilliSeconds From Last Cell of Same Type: \(milliSecondsFromLastCellOfSameType)")
+        
+        switch selectedLap.type{
+        case lap1Name: cell.backgroundColor = lap1Color
+        case lap2Name: cell.backgroundColor = lap2Color
+        case lap3Name: cell.backgroundColor = lap3Color
+        case lap4Name: cell.backgroundColor = lap4Color
+        default: cell.backgroundColor = .red
         }
         
         return cell

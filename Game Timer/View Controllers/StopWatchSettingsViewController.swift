@@ -12,8 +12,12 @@ class StopWatchSettingsViewController: UIViewController {
     var fromViewController: StopWatchViewController = StopWatchViewController()
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        // TODO: Set everything to change on appear.
+        stopwatchSettingsView.backgroundColor = Theme.selectedTheme.customBackgroundColor
+        confirmButton.tintColor = Theme.selectedTheme.customPrimaryColor
+        lap1TextField.backgroundColor = Theme.selectedTheme.customSecondaryColor
+        lap2TextField.backgroundColor = Theme.selectedTheme.customSecondaryColor
+        lap3TextField.backgroundColor = Theme.selectedTheme.customSecondaryColor
+        lap4TextField.backgroundColor = Theme.selectedTheme.customSecondaryColor
     }
     
     override func viewDidLoad() {
@@ -120,10 +124,10 @@ class StopWatchSettingsViewController: UIViewController {
             lap4Name = lap4TextField.text!
         }
         // Sets the lap_ButtonColor to the inputed color.
-        fromViewController.lap1ButtonColor = lap1ButtonColor
-        fromViewController.lap2ButtonColor = lap2ButtonColor
-        fromViewController.lap3ButtonColor = lap3ButtonColor
-        fromViewController.lap4ButtonColor = lap4ButtonColor
+        fromViewController.lap1Color = lap1ButtonColor
+        fromViewController.lap2Color = lap2ButtonColor
+        fromViewController.lap3Color = lap3ButtonColor
+        fromViewController.lap4Color = lap4ButtonColor
         // Sets the lap_Name to the inputed value.
         fromViewController.lap1Name = lap1Name
         fromViewController.lap2Name = lap2Name
@@ -131,7 +135,10 @@ class StopWatchSettingsViewController: UIViewController {
         fromViewController.lap4Name = lap4Name
         // Tell the ``StopWatchViewController`` to update it's screen so the values fix themselves.
         Task { await fromViewController.updateScreen() }
-        dismiss(animated: true)
+        fromViewController.passedFromStopWatchSettings = true
+        dismiss(animated: true) { [self] in
+            fromViewController.resetLapTableView()
+        }
     }
     
     // MARK: Functions

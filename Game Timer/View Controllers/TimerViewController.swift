@@ -38,7 +38,12 @@ class TimerViewController: UIViewController {
         resetButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
         hideShowTimerButton.tintColor = Theme.selectedTheme.customPrimaryColor
         hideInterface.tintColor = Theme.selectedTheme.customPrimaryColor
-        // TODO: Set everything to change on appear.
+        randomSwitchButton.thumbTintColor = Theme.selectedTheme.customPrimaryColor
+        randomSwitchButton.onTintColor = Theme.selectedTheme.customSecondaryColor
+        timerLabel.textColor = Theme.selectedTheme.customPrimaryColor
+        timerBar.progressTintColor = Theme.selectedTheme.customPrimaryColor
+        timerBar.trackTintColor = Theme.selectedTheme.customBackgroundColor
+        unHideButton.tintColor = Theme.selectedTheme.customSecondaryColor
         
     }
     
@@ -290,16 +295,17 @@ class TimerViewController: UIViewController {
         didSet { // When set..
             if timesOut { // If time is out..
                 timeIsOut()
+                buttonEnableStatusChange(button: pauseButtonOutlet, enabled: false)
             } else { // If time is not out
                 stopTimeIsOut()
             }
         }
     }
     func timeIsOut() {
-        buttonEnableStatusChange(button: pauseButtonOutlet, enabled: !isGoing) // 'Dim' the pause button
+        buttonEnableStatusChange(button: pauseButtonOutlet, enabled: false) // 'Dim' the pause button
         timesOutAnimationTimer = .scheduledTimer(withTimeInterval: TimeInterval(2), repeats: false, block: {[self] _ in // Start a timer of 2 seconds
             playAudio()
-            Task { await updateTimerLabelBackgroundColor(color: .red) } // Set the timerLabelBackgroundColor to red.
+            Task { await updateTimerLabelBackgroundColor(color: Theme.selectedTheme.customSecondaryColor) } // Set the timerLabelBackgroundColor to red.
             _ = Timer.scheduledTimer(withTimeInterval: TimeInterval(1), repeats: false) {[self] _ in // Start another timer of 1 second
                 Task { await updateTimerLabelBackgroundColor(color: .clear) } // Set the timerLabelColor to clear.
             }
