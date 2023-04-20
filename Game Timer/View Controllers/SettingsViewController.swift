@@ -50,11 +50,18 @@ class SettingsViewController: UIViewController {
     // These are for when an action is done on an object.
     
     @IBAction func setButtonTouch(_ sender: UIButton) {
-        Theme.selectedTheme = Theme(customPrimaryColor: primaryColorWell.selectedColor ?? .tintColor, customBackgroundColor: backgroundColorWell.selectedColor ?? .black)
+        guard let primaryColor = primaryColorWell.selectedColor else { return }
+        guard let backgroundColor = backgroundColorWell.selectedColor else { return }
+        
+        Theme.selectedTheme = Theme(customPrimaryColor: primaryColor, customBackgroundColor: backgroundColor)
+        
         settingsView.backgroundColor = Theme.selectedTheme.customBackgroundColor
         setButtonOutlet.tintColor = Theme.selectedTheme.customPrimaryColor
         
-        ThemeDefault.saveColors()
+        let primaryColorAsString    = ThemeDefault.hexString(from: primaryColor)
+        let backgrouncColorAsString = ThemeDefault.hexString(from: backgroundColor)
+        ThemeDefault.shared().primaryColorHexString    = primaryColorAsString
+        ThemeDefault.shared().backgroundColorHexString = backgrouncColorAsString
     }
     
     
